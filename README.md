@@ -10,6 +10,8 @@ Does giving an AI research agent structured self-reflection make it a better res
 
 This repo asks: **what if we give the agent better cognitive scaffolding?** We test 4 different `program.md` variants (arms) that add increasing levels of self-reflection to the agent's research loop.
 
+The working hypothesis: forcing explicit predictions makes the agent expose its internal assumptions, and attribution turns failed runs into belief updates rather than just logs.
+
 ## The 4 Arms
 
 | Arm | Program | What it adds |
@@ -19,7 +21,7 @@ This repo asks: **what if we give the agent better cognitive scaffolding?** We t
 | **3 — Beliefs** | `program_beliefs.md` | + Structured beliefs with confidence levels, updated after each experiment |
 | **4 — Reflective** | `program_reflective.md` | + Beliefs + predictions before each run + post-hoc reflection when predictions are wrong |
 
-Each arm runs 25 experiments (5 min each) on the same codebase, same hardware (Apple Silicon MPS), same starting `train.py`.
+Each arm starts from the same codebase, same hardware (Apple Silicon MPS), same starting `train.py`.
 
 ## Results
 
@@ -28,21 +30,26 @@ Each arm runs 25 experiments (5 min each) on the same codebase, same hardware (A
 | 1 — Baseline | 1.405 | 25 | Batch 8K |
 | 2 — Summary | 1.404 | 50 | Batch 16K, warmdown 0.3, 8x MLP |
 | 3 — Beliefs | 1.392 | 52 | Matrix LR 0.12, GELU activation |
-| 4 — Reflective | **1.349** | 26 | Batch 16K, no softcap, depth=3 |
+| 4 — Reflective | 1.349 | 26 | Batch 16K, no softcap, depth=3 |
 
-**Arm 4 wins by a clear margin.** The reflective agent discovered that reducing model depth from 4 to 3 gives more training steps in the fixed 5-minute budget — an insight no other arm found. Its prediction calibration improved by 71% over the course of the run (first-half mean gap 0.066 → second-half 0.019).
+Arm 4 reached a better config in fewer trials. Arms 2 and 3 ran longer but didn't reach the same level. The uneven experiment counts are a limitation — ideally each arm would run the same number.
+
+The reflective agent discovered that reducing model depth from 4 to 3 gives more training steps in the fixed 5-minute budget. This hypothesis did not emerge in the other arms over the runs shown.
+
+Prediction calibration appeared to improve over the run. Measuring gap as |predicted − actual| val_bpb: first-half mean 0.066, second-half 0.019 (n=26, so treat as suggestive).
 
 ![Prediction calibration](prediction_accuracy.png)
 
 ![Diagnostics](diagnostics.png)
 
-### Key takeaways
+### Observations
 
-- **Reflective >> Beliefs > Summary ≈ Baseline** for research efficiency
-- Predictions + reflection let the agent build a causal model of what drives performance (step count matters more than model size on MPS), leading to the depth=3 breakthrough
+- **Reflective > Beliefs > Summary ≈ Baseline** in this setup
+- The reflective agent built a causal model of what drives performance (step count matters more than model size on MPS), which led to the depth=3 discovery
 - Beliefs alone (Arm 3) helped explore LR space more aggressively and try activation swaps, but plateaued
-- Summaries without structured beliefs (Arm 2) performed nearly identically to no scaffolding at all — unstructured text memory doesn't help much
-- Arms 2 and 3 ran ~50 experiments each but couldn't match Arm 4's 25-experiment result
+- Summaries without structured beliefs (Arm 2) performed nearly identically to no scaffolding at all — unstructured text memory didn't help much in this case
+
+**Caveat:** This is a single run on one hardware setup (MPS). Results may differ on CUDA/H100 where throughput dynamics are different. More runs are needed to confirm the pattern.
 
 ## Reproducing
 
