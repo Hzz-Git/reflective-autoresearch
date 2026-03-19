@@ -1,0 +1,14 @@
+experiment_number	hypothesis_summary	actual_val_bpb	best_val_bpb_so_far	kept_or_reverted
+1	baseline	1.552187	1.552187	kept
+2	increase depth from 4 to 8	1.780495	1.552187	reverted
+3	increase total batch size to 128K	1.772625	1.552187	reverted
+4	reduce total batch size to 32K	1.528647	1.528647	kept
+5	reduce batch to 16K and device batch to 8	1.455656	1.455656	kept
+6	reduce batch to 8K and device batch to 4	1.405233	1.405233	kept
+7	reduce batch to 4K and device batch to 2	1.464849	1.405233	reverted
+8	increase depth from 4 to 6 (with batch 8K)	1.472291	1.405233	reverted
+9	double embedding LR from 0.6 to 1.2	1.432426	1.405233	reverted
+10	increase matrix LR from 0.04 to 0.08	1.435489	1.405233	reverted
+11	add 10% LR warmup	1.445001	1.405233	reverted
+12	reduce warmdown ratio from 0.5 to 0.3	1.423994	1.405233	reverted
+13	increase aspect ratio from 64 to 96	1.458668	1.405233	reverted

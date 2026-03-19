@@ -1,0 +1,53 @@
+experiment_number	hypothesis_summary	motivating_beliefs	actual_val_bpb	best_val_bpb_so_far	kept_or_reverted	beliefs_updated
+1	baseline (depth=4, 11.5M params, defaults)	none	1.547903	1.547903	kept	1,2,3,4,5
+2	depth=8 (50.3M params, 42 steps)	1,4,6	1.914563	1.547903	reverted	1,4,6
+3	depth=6 (26.3M params, 131 steps)	1,4,6,7	1.600201	1.547903	reverted	1,4,7
+4	MATRIX_LR=0.08 (2x baseline)	2,7	1.492640	1.492640	kept	2,7
+5	MATRIX_LR=0.12 (3x baseline)	2,7,9	1.451649	1.451649	kept	2,9
+6	MATRIX_LR=0.20 (5x baseline)	9	1.576791	1.451649	reverted	9
+7	MATRIX_LR=0.16	9	1.569855	1.451649	reverted	9
+8	EMBEDDING_LR=1.2 (2x default)	9,10	1.506206	1.451649	reverted	9
+9	warmup=0.05 warmdown=0.3	10	1.521540	1.451649	reverted	10
+10	TOTAL_BATCH_SIZE=32K	3,11	1.437385	1.437385	kept	3,11
+11	TOTAL_BATCH_SIZE=16K device_batch=8	3,10	1.429479	1.429479	kept	3,10
+12	TOTAL_BATCH_SIZE=8K device_batch=4	9,10	1.439931	1.429479	reverted	10
+13	weight_decay=0	9	1.425465	1.425465	kept	9
+14	depth=5 (24.6M params)	10	1.576983	1.425465	reverted	10
+15	aspect_ratio=128 (n_embd=512, 29.4M params)	8,11	1.584213	1.425465	reverted	8
+16	UNEMBEDDING_LR=0.01	8,10	1.426534	1.425465	reverted	8
+17	HEAD_DIM=64 (4 heads)	8	1.525038	1.425465	reverted	8
+18	SiLU activation (replace relu-squared)	8	1.410924	1.410924	kept	8
+19	SwiGLU MLP (gated SiLU)	8,10	1.434772	1.410924	reverted	8,10
+20	warmdown_ratio=0.67	9	1.416959	1.410924	reverted	9
+21	Adam beta1=0.9	8	1.424028	1.410924	reverted	8
+22	EMBEDDING_LR=0.3	10	1.418248	1.410924	reverted	10
+23	softcap=30	8	1.423980	1.410924	reverted	8
+24	MATRIX_LR=0.10 (with SiLU)	8	1.417348	1.410924	reverted	8
+25	GELU activation (replace SiLU)	2	1.391518	1.391518	kept	2
+26	MATRIX_LR=0.14 (with GELU)	8	1.407008	1.391518	reverted	8
+27	batch=8K with GELU	9	1.412060	1.391518	reverted	9
+28	depth=3 (10.7M, 668 steps)	6	1.410099	1.391518	reverted	6
+29	FINAL_LR_FRAC=0.1	10	1.400051	1.391518	reverted	10
+30	SCALAR_LR=1.0	9	1.402434	1.391518	reverted	9
+31	WINDOW_PATTERN=SSSL	8	1.402612	1.391518	reverted	8
+32	MATRIX_LR=0.11	8	1.394883	1.391518	reverted	8
+33	MLP 6x hidden ratio	10	1.405938	1.391518	reverted	10
+34	MLP 3x hidden ratio	7	1.404646	1.391518	reverted	7
+35	batch=32K with GELU	9	1.433101	1.391518	reverted	9
+36	remove softcap	8	1.405686	1.391518	reverted	8
+37	softcap=10	11	1.406125	1.391518	reverted	11
+38	x0_lambdas init=0.2	9	1.409682	1.391518	reverted	9
+39	EMBEDDING_LR=0.8	7	1.401615	1.391518	reverted	7
+40	DEVICE_BATCH_SIZE=4 (grad_accum=2)	3	1.409580	1.391518	reverted	3
+41	GELU-squared activation	2	1.421551	1.391518	reverted	2
+42	UNEMBEDDING_LR=0.008	10	1.412831	1.391518	reverted	10
+43	UNEMBEDDING_LR=0.002	10	1.423907	1.391518	reverted	10
+44	x0_lambdas init=0.0	9	1.394607	1.391518	reverted	9
+45	x0_lambdas init=0.05	9	1.408039	1.391518	reverted	9
+46	Adam beta2=0.99	5	1.414574	1.391518	reverted	5
+47	Muon ns_steps=3	5	1.430179	1.391518	reverted	5
+48	Muon beta2=0.99	5	1.410236	1.391518	reverted	5
+49	EMBEDDING_LR=0.5 + MATRIX_LR=0.13 combo	2,7	1.412188	1.391518	reverted	none
+50	lm_head init std=0.01	9	1.411896	1.391518	reverted	9
+51	WARMDOWN_RATIO=0.4	6	1.416634	1.391518	reverted	6
+52	remove QK norm	9	1.700025	1.391518	reverted	none

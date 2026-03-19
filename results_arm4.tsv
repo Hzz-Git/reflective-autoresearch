@@ -1,0 +1,27 @@
+experiment_number	hypothesis_summary	motivating_beliefs	predicted_val_bpb	actual_val_bpb	prediction_gap	best_val_bpb_so_far	kept_or_reverted	attribution_summary	beliefs_updated	reflection_triggered
+0	baseline	N/A	N/A	1.546034	N/A	1.546034	kept	N/A	N/A	N/A
+1	depth=12 (768dim, ~100M params)	1,4	1.30	timeout	N/A	1.546034	reverted	model too large for MPS	1,4,6	no
+2	depth=6 (384dim, ~26M params)	1,4,6	1.45	1.771232	+0.32	1.546034	reverted	even moderate size increase fails	1,6,7	yes
+3	halve batch to 32K	4,7	1.47	1.436476	-0.034	1.436476	kept	step-count dominance confirmed	7	no
+4	batch 16K (device_batch=8)	3,7	1.40	1.391098	-0.009	1.391098	kept	further batch reduction helps	3,7	no
+5	batch 8K (device_batch=4)	3,7,9	1.37	1.430481	+0.06	1.391098	reverted	8K too small	3,9	no
+6	MATRIX_LR 0.04->0.08	2,6,9	1.39	1.409608	+0.02	1.391098	reverted	higher LR slightly worse	9	no
+7	5% warmup + 60% warmdown	6,8	1.37	1.416443	+0.026	1.391098	reverted	warmup wastes steps	6,8	yes
+8	warmdown 50%->30%	5,6	1.38	1.409447	+0.019	1.391098	reverted	less warmdown also hurts	5,6	yes
+9	weight_decay 0.2->0.0	6,9	1.38	1.414365	+0.024	1.391098	reverted	WD helps	6,9	no
+10	HEAD_DIM 128->64 (4 heads)	7,9	1.38	1.520421	+0.14	1.391098	reverted	more heads slower+worse on MPS	9	no
+11	wider ASPECT_RATIO=96 (384dim) depth=4	6,7	1.37	1.414012	+0.044	1.391098	reverted	wider model slower per step, net worse	6	no
+12	SwiGLU activation replacing ReLU²	7,4	1.38	1.413014	+0.033	1.391098	reverted	SwiGLU with matched params worse	7	no
+13	softcap 15->30	8	1.385	1.406972	+0.022	1.391098	reverted	less capping worse, 15 is good	8	no
+14	softcap 15->10	8	1.386	1.404845	+0.019	1.391098	reverted	tighter capping also worse, 15 optimal	8	no
+15	remove softcap entirely	9,4	1.386	1.386058	+0.000	1.386058	kept	softcap removal improves, new best	9	yes
+16	EMBEDDING_LR 0.6->1.0	9	1.381	1.389765	+0.009	1.386058	reverted	higher embedding LR slightly worse	9	no
+17	EMBEDDING_LR 0.6->0.3	9	1.386	1.392937	+0.007	1.386058	reverted	lower embedding LR also worse, 0.6 optimal	9	no
+18	remove value embeddings	10,4	1.39	1.433841	+0.044	1.386058	reverted	VE essential despite compute cost	10	no
+19	Muon ns_steps 5->3	11,4	1.385	1.408799	+0.024	1.386058	reverted	fewer NS iters hurts quality, no speed gain	11	no
+20	UNEMBEDDING_LR 0.004->0.008	9	1.386	1.406339	+0.020	1.386058	reverted	higher unembed LR worse	9	no
+21	FINAL_LR_FRAC 0.0->0.1	7	1.383	1.387577	+0.005	1.386058	reverted	residual LR slightly worse	7	no
+22	Adam beta1 0.8->0.9	8	1.386	1.398314	+0.012	1.386058	reverted	higher beta1 worse	8	no
+23	depth=3 (192dim)	9,4	1.40	1.371695	-0.028	1.371695	kept	fewer layers + more steps = new best!	1,9	no
+24	depth=2 (128dim)	8,2	1.38	1.411946	+0.032	1.371695	reverted	too shallow despite 2881 steps	8	no
+25	depth=3 ASPECT_RATIO=85 (256dim)	9,1,2	1.38	1.348994	-0.031	1.348994	kept	wider depth=3 is new best by far!	1,9	no

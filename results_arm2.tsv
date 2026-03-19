@@ -1,0 +1,51 @@
+experiment_number	hypothesis_summary	actual_val_bpb	best_val_bpb_so_far	kept_or_reverted
+1	Baseline: train.py as-is (depth=4, dim=256, batch=65K)	1.537437	1.537437	kept
+2	Deeper model: depth=8 (dim=512, 50M params, only 42 steps)	1.913544	1.537437	reverted
+3	Moderate depth: depth=6 (dim=384, 26M params, 77 steps)	1.792122	1.537437	reverted
+4	Smaller batch: 32K (276 steps)	1.447720	1.447720	kept
+5	Even smaller batch: 16K (512 steps)	1.422888	1.422888	kept
+6	Batch=8K (914 steps, too noisy)	1.427921	1.422888	reverted
+7	Depth=5 dim=256 (AR=51, 429 steps)	1.445049	1.422888	reverted
+8	Higher matrix LR 0.08	1.436770	1.422888	reverted
+9	5% warmup	1.441160	1.422888	reverted
+10	HEAD_DIM=64 (4 heads)	1.512056	1.422888	reverted
+11	Shorter warmdown (0.3)	1.407991	1.407991	kept
+12	Very short warmdown (0.15)	1.425121	1.407991	reverted
+13	No weight decay	1.439711	1.407991	reverted
+14	SwiGLU MLP	1.409895	1.407991	reverted
+15	FINAL_LR_FRAC=0.1	1.406125	1.406125	kept
+16	Depth=5 with optimized schedule	1.413796	1.406125	reverted
+17	Wider MLP 6x	1.404587	1.404587	kept
+18	8x MLP expansion	1.403522	1.403522	kept
+19	Embedding LR=1.2	1.404947	1.403522	reverted
+20	Disable value embeddings	1.545902	1.403522	reverted
+21	Logit softcap=30	1.418195	1.403522	reverted
+22	SSSL sliding window	1.420743	1.403522	reverted
+23	Muon ns_steps=3	1.438393	1.403522	reverted
+24	SwiGLU param-matched	1.417363	1.403522	reverted
+25	Weight decay=0.4	1.419990	1.403522	reverted
+26	12x MLP expansion	1.414444	1.403522	reverted
+27	Float32 embeddings	1.424018	1.403522	reverted
+28	VE on every layer	1.425248	1.403522	reverted
+29	Cosine LR schedule	1.418895	1.403522	reverted
+30	Matrix LR=0.02	1.421656	1.403522	reverted
+31	Label smoothing 0.1	1.702921	1.403522	reverted
+32	Gradient clipping	1.419196	1.403522	reverted
+33	Weight tying	1.414669	1.403522	reverted
+34	x0_lambdas init=0.2	1.419098	1.403522	reverted
+35	Unembedding LR=0.008	1.427269	1.403522	reverted
+36	FINAL_LR_FRAC=0.2	1.415954	1.403522	reverted
+37	Remove QK-norm	1.432528	1.403522	reverted
+38	10x MLP expansion	1.418986	1.403522	reverted
+39	Warmdown=0.25	1.411336	1.403522	reverted
+40	Matrix LR=0.06	1.421899	1.403522	reverted
+41	Constant Muon momentum	1.424344	1.403522	reverted
+42	Constant weight decay	1.424133	1.403522	reverted
+43	Adam betas (0.9,0.99)	1.422896	1.403522	reverted
+44	Weight decay=0.1	1.419235	1.403522	reverted
+45	Parallel attn+MLP	1.424530	1.403522	reverted
+46	Embedding LR=0.3	1.422387	1.403522	reverted
+47	Scalar LR=1.0	1.420408	1.403522	reverted
+48	GELU activation	1.415395	1.403522	reverted
+49	Softcap=10	1.421292	1.403522	reverted
+50	Matrix LR=0.03	1.421132	1.403522	reverted
