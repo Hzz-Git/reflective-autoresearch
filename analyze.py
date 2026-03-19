@@ -180,8 +180,6 @@ def plot_diagnostics(all_data, all_rows, output_path="diagnostics.png"):
                     next_updated = rows[i + 1].get("beliefs_updated", "none").strip().lower()
                     if next_updated in ("none", "", "n/a"):
                         wasted_count += 1
-                else:
-                    wasted_count += 1
         wasted[arm_id] = wasted_count / total_reverts if total_reverts > 0 else 0
 
     fig, axes = plt.subplots(1, 3, figsize=(15, 5))

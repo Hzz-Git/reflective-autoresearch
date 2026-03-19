@@ -21,7 +21,7 @@ The working hypothesis: forcing explicit predictions makes the agent expose its 
 | **3 — Beliefs** | `program_beliefs.md` | + Structured beliefs with confidence levels, updated after each experiment |
 | **4 — Reflective** | `program_reflective.md` | + Beliefs + predictions before each run + post-hoc reflection when predictions are wrong |
 
-Each arm starts from the same codebase, same hardware (Apple Silicon MPS), same starting `train.py`.
+Each arm starts from the same codebase, same hardware (Apple Silicon MPS), same starting `train.py`. Arms 3 and 4 are seeded with 5 weak priors in `beliefs_seed.md` (e.g. "larger models generally achieve lower val_bpb", "batch size trades throughput for gradient noise") to bootstrap the belief-update loop — without a seed, the first few experiments would have no beliefs to test against. The priors are deliberately low-confidence and generic; the agent is expected to override them quickly.
 
 ## Results
 
@@ -49,7 +49,12 @@ Prediction calibration appeared to improve over the run. Measuring gap as |predi
 - Beliefs alone (Arm 3) helped explore LR space more aggressively and try activation swaps, but plateaued
 - Summaries without structured beliefs (Arm 2) performed nearly identically to no scaffolding at all — unstructured text memory didn't help much in this case
 
-**Caveat:** This is a single run on one hardware setup (MPS). Results may differ on CUDA/H100 where throughput dynamics are different. More runs are needed to confirm the pattern.
+### Limitations
+
+- **Single run, single hardware.** This is one run on Apple Silicon MPS. Results may differ on CUDA/H100 where throughput dynamics are different. More runs are needed to confirm the pattern.
+- **Uneven experiment counts.** Arms 2 and 3 ran ~50 experiments (the agent kept going past the 25 target), while Arms 1 and 4 ran ~25. This makes direct comparison harder — Arm 4's advantage could partly reflect having less time to plateau.
+- **Reproduction requires manual setup.** Each arm needs a separate Claude Code session launched by hand (`claude --dangerously-skip-permissions`). There is no fully automated orchestrator.
+- **Apple Silicon only.** The MPS-specific optimizations in `train.py` mean results are not portable to other platforms without code changes.
 
 ## Reproducing
 
